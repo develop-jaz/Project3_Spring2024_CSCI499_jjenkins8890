@@ -40,37 +40,38 @@ if (isset($_POST['updatebtn']))
 //// Make sure your code has an echo statement that says "Record Updated" or anything similar or an error message
     // Retrieve form data
     $id = isset($_POST['id']) ? $_POST['id'] : '';
-    $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
-    $calories = isset($_POST['calories']) ? $_POST['calories'] : '';
+    $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : '';
+    $calories = isset($_POST['calories']) ? intval($_POST['calories']) : '';
 
-    // Construct the UPDATE query
-    $updateFields = array();
-    if(!empty($amount)) {
-        $updateFields[] = "amount='$amount'";
-    }
-    if(!empty($calories)) {
-        $updateFields[] = "calories='$calories'";
-    }
+    // Check if ID is provided
+    if (!empty($id)) {
+        // Construct the UPDATE query
+        $updateFields = array();
+        if ($amount !== '') {
+            $updateFields[] = "amount='$amount'";
+        }
+        if ($calories !== '') {
+            $updateFields[] = "calories='$calories'";
+        }
 
-    // If no fields to update
-    if(empty($updateFields)) {
-        echo "No fields to update.";
-    } else {
-        // Include ID in update fields
-        if(!empty($id)) {
+        // If there are fields to update
+        if (!empty($updateFields)) {
             // Construct the UPDATE query
-            $updateQuery = "UPDATE fooditems SET " . implode(',', $updateFields) . " WHERE id=$id";
+            $updateQuery = "UPDATE fooditems SET " . implode(',', $updateFields) . " WHERE id='$id'";
 
             // Perform the update query
-            if(mysqli_query($link, $updateQuery)) {
+            if (mysqli_query($link, $updateQuery)) {
                 echo "Record Updated successfully";
             } else {
                 echo "Error updating record: " . mysqli_error($link);
             }
         } else {
-            echo "Invalid ID.";
+            echo "No fields to update.";
         }
+    } else {
+        echo "Invalid ID.";
     }
+
 
 
 
@@ -266,7 +267,7 @@ if (isset($_POST['deletebtn']))
                 <!-- (Q5) Create an HTML table below to enter item, amount, unit, calories, protein, carbohydrate, and fat in different text boxes -->
                 <table>
                     <tr>
-                        <th align="left">Field</th>
+                        <th align="left">Item</th>
                         <td><input type="text" name="item" placeholder="Enter Item"></td>
                     </tr>
                     <tr>
