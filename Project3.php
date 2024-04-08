@@ -38,39 +38,20 @@ function getId($link) {
 if (isset($_POST['updatebtn']))
 {//// Write PHP Code below to update the record of your database (Hint: Use $_POST) (Q9)
 //// Make sure your code has an echo statement that says "Record Updated" or anything similar or an error message
-    // Retrieve form data
-    $id = isset($_POST['id']) ? $_POST['id'] : '';
-    $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : '';
-    $calories = isset($_POST['calories']) ? intval($_POST['calories']) : '';
+    // Retrieve values from the form
+    $id = $_POST['update_id']; 
+    $amount = $_POST['update_amount'];
+    $calories = $_POST['update_calories']; 
+    // Update query
+    $queryUpdate = "UPDATE fooditems SET amount=$amount, calories=$calories WHERE id=$id";
 
-    // Check if ID is provided
-    if (!empty($id)) {
-        // Construct the UPDATE query
-        $updateFields = array();
-        if ($amount !== '') {
-            $updateFields[] = "amount='$amount'";
-        }
-        if ($calories !== '') {
-            $updateFields[] = "calories='$calories'";
-        }
-
-        // If there are fields to update
-        if (!empty($updateFields)) {
-            // Construct the UPDATE query
-            $updateQuery = "UPDATE fooditems SET " . implode(',', $updateFields) . " WHERE id='$id'";
-
-            // Perform the update query
-            if (mysqli_query($link, $updateQuery)) {
-                echo "Record Updated successfully";
-            } else {
-                echo "Error updating record: " . mysqli_error($link);
-            }
-        } else {
-            echo "No fields to update.";
-        }
+    // Perform the update
+    if (mysqli_query($link, $queryUpdate)) {
+        echo " Record Updated";
     } else {
-        echo "Invalid ID.";
+        echo "Error updating record: " . mysqli_error($link);
     }
+    
 
 
 
@@ -99,7 +80,7 @@ if (isset($_POST['insertbtn']))
  
      // Perform the INSERT query
      if(mysqli_query($link, $insertQuery)) {
-         echo "Record Saved successfully";
+         echo " Record Saved successfully";
      } else {
          echo "Error saving record: " . mysqli_error($link);
      }
@@ -121,7 +102,7 @@ if (isset($_POST['deletebtn']))
 
    // Perform the DELETE query
    if(mysqli_query($link, $deleteQuery)) {
-       echo "Record Deleted successfully";
+       echo " Record Deleted successfully";
    } else {
        echo "Error deleting record: " . mysqli_error($link);
    }
@@ -232,16 +213,16 @@ if (isset($_POST['deletebtn']))
             <!--Create an HTML table below to enter ID, amount, and calories in different text boxes. This table is used for updating records in your table. (Q3) --->
             <table>
                 <tr>
-                    <th align="left">ID</th>
-                    <td><input type="text" name="id" placeholder="Enter ID"></td>
+                    <td>ID:</td>
+                    <td><input type="text" name="update_id" id="update_id"></td>
                 </tr>
                 <tr>
-                    <th align="left">Amount</th>
-                    <td><input type="text" name="amount" placeholder="Enter Amount"></td>
+                    <td>Amount:</td>
+                    <td><input type="text" name="update_amount" id="update_amount"></td>
                 </tr>
                 <tr>
-                    <th align="left">Calories</th>
-                    <td><input type="text" name="calories" placeholder="Enter Calories"></td>
+                    <td>Calories:</td>
+                    <td><input type="text" name="update_calories" id="update_calories"></td>
                 </tr>
             </table>
 
